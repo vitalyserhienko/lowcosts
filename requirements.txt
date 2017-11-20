@@ -28,3 +28,4 @@ urllib3==1.22
 webencodings==0.5.1
 xvfbwrapper==0.2.9
 dj-database-url==0.4.2
+psycopg2==2.6.2
