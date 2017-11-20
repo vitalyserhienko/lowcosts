@@ -1,0 +1,68 @@
+{% extends 'wizz/base.html' %}
+
+{% block results %}
+<div class="container">
+  <div class="col-sm-">
+    <table class="table table-striped">
+      <h3>Туда:</h3>
+      <thead>
+        <tr>
+          <th>А/П Вылета</th>
+          <th>А/П Прилета</th>
+          <th>Дата вылета</th>
+          <th>Цена</th>
+        </tr>
+      </thead>
+      {% for obj in req_content.outboundFlights %}
+      <tr>
+        <td>
+          {{obj.departureStation}}
+        </td>
+        <td>
+          {{obj.arrivalStation}}
+        </td>
+        <td>
+          {{ obj.departureDate }}
+        </td>
+        <td>
+          {{ obj.price.amount }}
+        </td>
+        </td>
+      </tr>
+      {% endfor%}
+    </table>
+  </div>
+  <div class="col-sm-">
+    <table class="table table-striped">
+      <thead>
+        <h3>Обратно:</h3>
+        <tr>
+          <th>А/П Вылета</th>
+          <th>А/П Прилета</th>
+          <th>Дата вылета</th>
+          <th>Цена</th>
+        </tr>
+      </thead>
+      {% for obj in req_content.returnFlights %}
+      <tr>
+        <td>
+          {{obj.departureStation}}
+        </td>
+        <td>
+          {{obj.arrivalStation}}
+        </td>
+        <td>
+          {{ obj.departureDate }}
+        </td>
+        <td>
+          {{ obj.price.amount }}
+        </td>
+        </td>
+      </tr>
+      {% endfor%}
+    </table>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}

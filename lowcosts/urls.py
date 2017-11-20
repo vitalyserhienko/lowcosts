@@ -19,5 +19,6 @@ from wizz import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.wizz, name='wizz'),
+    url(r'^$', views.home, name='home'),
+    url(r'^search', views.wizz, name='wizz'),
 ]

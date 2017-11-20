@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <form>
+        <div class="row">
+          <div class="col">
+            Вылет из:
+            <select class="form-control" id="exampleFormControlSelect1" name="departureStation" form="carform">
+    <option value="IEV">Kiev (IEV)</option>
+  </select>
+          </div>
+          <div class="col">
+            Прилет в:
+            <select class="form-control" id="exampleFormControlSelect1" name="departureStation" form="carform">
+    <option value="IEV">Budapest (BUD)</option>
+  </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            Дата вылета:
+            <input class="form-control" type="date">
+          </div>
+          <div class="col">
+            Дата прилета:
+            <input class="form-control" type="date">
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+        <div class="form-check disabled">
+          <label class="form-check-label">
+      <input class="form-check-input" type="checkbox">WizzAir Discont Club</input>
+    </label>
+  </div>
+</div>
+<div class="col">
+          <button type="button" class="btn btn-info float-right" onclick="location.href='{% url 'wizz' %}'">Искать</button>
+</div>
+
+    </div>
+      </form>
