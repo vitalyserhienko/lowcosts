@@ -1,11 +1,20 @@
 from django.shortcuts import render
 from .models import Airport, priceType, priceTemplate
+from .forms import FlightSearchForm
 import requests
 import json
 
 # Create your views here.
 def home(request):
-    return render(request, 'wizz/base.html', {})
+    return render(request, 'base.html', {})
+
+def flight_search_form(request):
+    form = FlightSearchForm(request.POST)
+    if request.method == 'POST':
+        departureStation = request.POST.get('departureStation')
+    return render(request, 'wizz/search_form.html', {
+        'form': form
+})
 
 def wizz(request):
     # request to wizzair website
