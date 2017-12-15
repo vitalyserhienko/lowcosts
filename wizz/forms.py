@@ -1,14 +1,38 @@
 from django import forms
 import datetime
+from datetime import timedelta
 from .models import Airport, priceType, priceTemplate
+from django.contrib.admin.widgets import AdminDateWidget
 
 class FlightSearchForm(forms.Form):
-    departureStation = forms.CharField()
-    arrivalStation = forms.CharField()
-    date_from = forms.DateField(initial = datetime.date.today)
-    date_to = forms.DateField(initial=datetime.date.today)
+
+    attrs_dict = { 'class': 'form-control', 'id': 'exampleFormControlSelect1' }
+
+    def __init__(self, *args, **kwargs):
+        super(FlightSearchForm, self).__init__(*args, **kwargs)
+        self.fields['departureStation'].choices = [('', '----------')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
+        self.fields['arrivalStation'].choices = [('', '----------')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
+        self.fields['priceType'].choices = [('', '----------')] + [(pt.priceType, pt.name) for pt in priceType.objects.all()]
+
+    departureStation = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))
+    arrivalStation = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))
+    date_from = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    'class': 'form-control',
+                                    'type': 'date',
+                                    'value': datetime.date.today()
+                                }))
+    date_to = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    'class': 'form-control',
+                                    'type': 'date',
+                                    'value': datetime.date.today() + datetime.timedelta(7)
+                                }))
+
     departureStation_return = forms.CharField()
     arrivalStation_return = forms.CharField()
     date_from_return = forms.DateField(initial=datetime.date.today)
     date_to_return = forms.DateField(initial=datetime.date.today)
-    priceType = forms.CharField()
+
+    priceType = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))
+    # priceType = forms.BooleanField(label='WizzAir', widget=forms.CheckboxInput(), required=False)

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Airport, priceType, priceTemplate
 from .forms import FlightSearchForm
+from .wizz_request import request_data
+import datetime
 import requests
 import json
 
@@ -9,11 +11,25 @@ def home(request):
     return render(request, 'base.html', {})
 
 def flight_search_form(request):
+
     form = FlightSearchForm(request.POST)
+    request_res = {}
+
     if request.method == 'POST':
         departureStation = request.POST.get('departureStation')
+        arrivalStation = request.POST.get('arrivalStation')
+        date_from = request.POST.get('date_from')
+        date_to = request.POST.get('date_to')
+        # date_to_c = datetime.datetime.fromtimestamp(int(date_from)).strftime('%Y-%m-%d')
+        priceType = request.POST.get('priceType')
+
+        request_1 = request_data(departureStation, arrivalStation, date_from, date_to, priceType)
+
+        request_res.update(request_1)
+
     return render(request, 'wizz/search_form.html', {
-        'form': form
+        'form': form,
+        'request_res': request_res
 })
 
 def wizz(request):
