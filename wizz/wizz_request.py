@@ -38,4 +38,4 @@ def request_data(departureStation, arrivalStation, date_from, date_to, priceType
 # {"flightList":[{"departureStation":"IEV","arrivalStation":"BUD","from":"2017-12-14","to":"2017-12-31"},{"departureStation":"BUD","arrivalStation":"IEV","from":"2018-01-01","to":"2018-02-04"}],"priceType":"regular","adultCount":1,"childCount":0,"infantCount":0}
 
 
-print(request_data('IEV', 'BUD', '2017-12-15', '2018-01-31', 'regular'))
+# print(request_data('IEV', 'BUD', '2017-12-15', '2018-01-31', 'regular'))
