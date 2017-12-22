@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
     url(r'^results', views.wizz, name='wizz'),
+    url(r'^history', views.search_history, name='search-history'),
     url(r'^search', views.flight_search_form, name='search-form'),
 ]

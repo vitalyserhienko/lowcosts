@@ -35,4 +35,3 @@ class FlightSearchForm(forms.Form):
     date_to_return = forms.DateField(initial=datetime.date.today)
 
     priceType = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))
-    # priceType = forms.BooleanField(label='WizzAir', widget=forms.CheckboxInput(), required=False)

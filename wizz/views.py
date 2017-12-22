@@ -1,14 +1,28 @@
 from django.shortcuts import render
-from .models import Airport, priceType, priceTemplate
+from .models import Airport, priceType, priceTemplate, Price
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import FlightSearchForm
 from .wizz_request import request_data
-import datetime
+from django.utils import timezone
 import requests
 import json
 
 # Create your views here.
 def home(request):
     return render(request, 'base.html', {})
+    
+def search_history(request):
+    prices = Price.objects.all().order_by('update_date', 'price_USD')
+    paginator = Paginator(prices, 25)
+    page = request.GET.get('page')
+    try:
+        prices = paginator.page(page)
+    except PageNotAnInteger:
+        prices = paginator.page(1)
+    except EmptyPage:
+        prices = paginator.page(paginator.num_pages)
+    # contacts = paginator.get_page(page)
+    return render(request, 'wizz/history.html', { 'prices': prices })
 
 def flight_search_form(request):
 
@@ -20,10 +34,57 @@ def flight_search_form(request):
         arrivalStation = request.POST.get('arrivalStation')
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
-        # date_to_c = datetime.datetime.fromtimestamp(int(date_from)).strftime('%Y-%m-%d')
         priceType = request.POST.get('priceType')
-
         request_1 = request_data(departureStation, arrivalStation, date_from, date_to, priceType)
+
+        currency_now = requests.get('https://openexchangerates.org/api/latest.json?app_id=6cdf29a6391b479cb9d0a4fe9608fa04')
+        currency_json = json.loads(currency_now.content)
+
+        for j in request_1['outboundFlights']:
+            new_price = Price()
+            new_price.departureStation_IATA = j['departureStation']
+            new_price.arrivalStation_IATA = j['arrivalStation']
+            new_price.date = j['departureDate'][0:10]
+            if j['price'] is None:
+                print(j['price'])
+                new_price.price = 0.0
+                new_price.currency = 'NON'
+                new_price.price_USD = 0.0
+            else:
+                new_price.price = j['price']['amount']
+                new_price.currency = j['price']['currencyCode']
+                new_price.price_USD = float(new_price.price)/currency_json['rates'][new_price.currency]
+            new_price.price_type = priceType
+            new_price.update_date = timezone.now()
+            airport_d = Airport.objects.get(iata_code=j['departureStation'])
+            airport_a = Airport.objects.get(iata_code=j['arrivalStation'])
+            new_price.departureStation = airport_d.name #j['departureStation']
+            new_price.arrivalStation = airport_a.name #j['arrivalStation']
+            new_price.air_company = 'WiZZ Air'
+            new_price.save()
+
+        for j in request_1['returnFlights']:
+            new_price_return = Price()
+            new_price_return.departureStation_IATA = j['departureStation']
+            new_price_return.arrivalStation_IATA = j['arrivalStation']
+            new_price_return.date = j['departureDate'][0:10]
+            if j['price'] is None:
+                print(j['price'])
+                new_price_return.price = 0.0
+                new_price_return.currency = 'NON'
+                new_price_return.price_USD = 0.0
+            else:
+                new_price_return.price = j['price']['amount']
+                new_price_return.currency = j['price']['currencyCode']
+                new_price_return.price_USD = float(new_price_return.price) / currency_json['rates'][new_price_return.currency]
+            new_price_return.price_type = priceType
+            new_price_return.update_date = timezone.now()
+            airport_d_return = Airport.objects.get(iata_code=j['departureStation'])
+            airport_a_return = Airport.objects.get(iata_code=j['arrivalStation'])
+            new_price_return.departureStation = airport_d_return.name  # j['departureStation']
+            new_price_return.arrivalStation = airport_a_return.name  # j['arrivalStation']
+            new_price_return.air_company = 'WiZZ Air'
+            new_price_return.save()
 
         request_res.update(request_1)
 

@@ -31,11 +31,3 @@ def request_data(departureStation, arrivalStation, date_from, date_to, priceType
     elif 'validationCodes' not in req_json:
         function_responce.update(req_json)
         return function_responce
-    # response_data = json.loads(req, encoding='utf-8')
-    # return function_responce, function_responce_error
-
-
-# {"flightList":[{"departureStation":"IEV","arrivalStation":"BUD","from":"2017-12-14","to":"2017-12-31"},{"departureStation":"BUD","arrivalStation":"IEV","from":"2018-01-01","to":"2018-02-04"}],"priceType":"regular","adultCount":1,"childCount":0,"infantCount":0}
-
-
-# print(request_data('IEV', 'BUD', '2017-12-15', '2018-01-31', 'regular'))

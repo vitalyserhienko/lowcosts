@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block history %}
+<div class="container">
+  <div class="col-sm-">
+    <div class="pagination">
+    <span class="step-links">
+        {% if prices.has_previous %}
+            <a href="?page=1">первая страница</a>
+            <a href="?page={{ prices.previous_page_number }}">предидущая страница</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ prices.number }} из {{ prices.paginator.num_pages }}.
+        </span>
+
+        {% if prices.has_next %}
+            <a href="?page={{ prices.next_page_number }}">следующая страница</a>
+            <a href="?page={{ prices.paginator.num_pages }}">последняя страница</a>
+        {% endif %}
+    </span>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>А/П Вылета</th>
+          <th>А/П Прилета</th>
+          <th>Дата вылета</th>
+          <th>Цена в USD</th>
+          <th>Цена в базовой валюте</th>
+          <th>Дата обновления</th>
+          <th>Тип цены</th>
+        </tr>
+      </thead>
+      {% for price in prices  %}
+      <tr>
+        <td>
+          {{price.departureStation}} ({{price.departureStation_IATA}})
+        </td>
+        <td>
+          {{price.arrivalStation}} ({{price.arrivalStation_IATA}})
+        </td>
+        <td>
+          {{ price.date|date:"d/m/Y" }}
+        </td>
+        <td>
+          {{ price.price_USD|floatformat:2 }} (USD)
+        </td>
+        <td>
+          {{ price.price }} ({{ price.currency }})
+        </td>
+        <td>
+          {{ price.update_date|date:"d/m/Y H:i" }}
+        </td>
+        <td>
+          {{ price.price_type }}
+        </td>
+      </tr>
+      {% endfor%}
+    </table>
+  </div>
+</div>
+{% endblock %}
