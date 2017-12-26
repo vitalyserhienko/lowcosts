@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^search', views.flight_search_form, name='search-form'),
     url(r'^requests', views.get_all_requests, name='all-requests'),
     url(r'^results/(?P<request_id>[\w{}.-]{1,12})/$', views.get_search_results, name='search-results'),
-
+    url(r'^update/(?P<city_code>[\w{}.-]{1,3})/$', views.get_wizzair_airports, name='update-iata'),
 ]

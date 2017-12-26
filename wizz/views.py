@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import Airport, priceType, priceTemplate, Price
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import FlightSearchForm
@@ -37,9 +37,7 @@ def get_all_requests(request):
     return render(request, 'wizz/all_requests.html', {'requests': requests})
 
 def flight_search_form(request):
-
     form = FlightSearchForm(request.POST)
-
     if request.method == 'POST':
         request_id = new_request_number()
         departureStation = request.POST.get('departureStation')
@@ -48,10 +46,8 @@ def flight_search_form(request):
         date_to = request.POST.get('date_to')
         priceType = request.POST.get('priceType')
         request_1 = request_data(departureStation, arrivalStation, date_from, date_to, priceType)
-
         currency_now = requests.get('https://openexchangerates.org/api/latest.json?app_id=6cdf29a6391b479cb9d0a4fe9608fa04')
         currency_json = json.loads(currency_now.content)
-
         for j in request_1['outboundFlights']:
             new_price = Price()
             new_price.request_id = request_id
@@ -75,7 +71,6 @@ def flight_search_form(request):
             new_price.arrivalStation = airport_a.name #j['arrivalStation']
             new_price.air_company = 'WiZZ Air'
             new_price.save()
-
         for j in request_1['returnFlights']:
             new_price_return = Price()
             new_price_return.request_id = request_id
@@ -99,12 +94,39 @@ def flight_search_form(request):
             new_price_return.arrivalStation = airport_a_return.name  # j['arrivalStation']
             new_price_return.air_company = 'WiZZ Air'
             new_price_return.save()
-
         # request_res.update(request_1)
         url = reverse('search-results', kwargs={'request_id': request_id})
         return HttpResponseRedirect(url)
-
     return render(request, 'wizz/search_form.html', {'form': form})
+
+def get_wizzair_airports(request, city_code):
+    ap_request = requests.get('https://be.wizzair.com/7.7.1/Api/asset/map?languageCode=uk-ua')
+    req_json = json.loads(ap_request.content)
+    kiev_connections = []
+    for city in req_json['cities']:
+        if city['iata'] == city_code:
+            airport = Airport.objects.get_or_create(
+                iata_code=city['iata'],
+                name=city['shortName'] + " (" + city['iata'] + ")",
+                counrty=city['countryName'],
+                city=city['shortName'],
+                longitude=city['longitude'],
+                latitude=city['latitude'],
+            )
+            for connect in city['connections']:
+                kiev_connections.append(connect['iata'])
+    for city in req_json['cities']:
+        for ap in kiev_connections:
+            if ap == city['iata']:
+                airport = Airport.objects.get_or_create(
+                iata_code=city['iata'],
+                name=city['shortName'] + " (" + city['iata'] + ")",
+                counrty=city['countryName'],
+                city=city['shortName'],
+                longitude=city['longitude'],
+                latitude=city['latitude'],
+            )
+    return HttpResponse("Done")
 
 # def wizz(request):
 #     # request to wizzair website

@@ -7,6 +7,8 @@ class Airport(models.Model):
     counrty = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     iata_code = models.CharField(max_length=100)
+    longitude = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
