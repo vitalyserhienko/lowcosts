@@ -12,14 +12,12 @@ def request_data(departureStation, arrivalStation, date_from, date_to, priceType
                                 "arrivalStation": arrivalStation,
                                 "from": date_from,
                                 "to": date_to
-                                },
-                                {
+                                },{
                                 "departureStation": arrivalStation,
                                 "arrivalStation": departureStation,
                                 "from": date_from,
                                 "to": date_to
-                                }
-                                ],
+                                }],
                                 "priceType": priceType
                                 }
     req = requests.post(request_url, headers=head, data=json.dumps(payload)).content

@@ -1,68 +1,50 @@
 {% extends 'base.html' %}
 
 {% block results %}
-<div class="container">
-  <div class="col-sm-">
-    <table class="table table-striped">
-      <h3>Туда:</h3>
+<div class="container col-sm-9">
+  <div class="row">
+    <p><a class="btn btn-info float-left" href="{% url 'search-form' %}">New search</a></p>
+    <p><a class="btn btn-info float-left" href="{% url 'all-requests' %}">All requests</a></p>
+  </div>
+  <div class="row justify-content-md-center">
+    <table class="table table-striped table-sm text-center">
       <thead>
         <tr>
-          <th>А/П Вылета</th>
-          <th>А/П Прилета</th>
           <th>Дата вылета</th>
-          <th>Цена</th>
+          <th>Аэропорт вылета</th>
+          <th>Аэропорт прилета</th>
+          <th>Цена в USD</th>
+          <th>Цена в базовой валюте</th>
+          <th>Дата обновления</th>
+          <th>Тип цены</th>
         </tr>
       </thead>
-      {% for obj in req_content.outboundFlights %}
+      {% for price in prices  %}
       <tr>
         <td>
-          {{obj.departureStation}}
+          {{ price.date|date:"d/m/Y" }}
         </td>
         <td>
-          {{obj.arrivalStation}}
+          {{price.departureStation}} ({{price.departureStation_IATA}})
         </td>
         <td>
-          {{ obj.departureDate }}
+          {{price.arrivalStation}} ({{price.arrivalStation_IATA}})
         </td>
         <td>
-          {{ obj.price.amount }}
+          {{ price.price_USD|floatformat:2 }} (USD)
         </td>
+        <td>
+          {{ price.price }} ({{ price.currency }})
+        </td>
+        <td>
+          {{ price.update_date|date:"d/m/Y H:i" }}
+        </td>
+        <td>
+          {{ price.price_type }}
         </td>
       </tr>
       {% endfor%}
     </table>
   </div>
-  <div class="col-sm-">
-    <table class="table table-striped">
-      <thead>
-        <h3>Обратно:</h3>
-        <tr>
-          <th>А/П Вылета</th>
-          <th>А/П Прилета</th>
-          <th>Дата вылета</th>
-          <th>Цена</th>
-        </tr>
-      </thead>
-      {% for obj in req_content.returnFlights %}
-      <tr>
-        <td>
-          {{obj.departureStation}}
-        </td>
-        <td>
-          {{obj.arrivalStation}}
-        </td>
-        <td>
-          {{ obj.departureDate }}
-        </td>
-        <td>
-          {{ obj.price.amount }}
-        </td>
-        </td>
-      </tr>
-      {% endfor%}
-    </table>
-  </div>
-</div>
-</div>
 </div>
 {% endblock %}

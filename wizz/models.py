@@ -17,8 +17,9 @@ class priceType(models.Model):
 
     def __str__(self):
         return self.name
-        
+
 class Price(models.Model):
+    request_id = models.CharField(max_length=50)
     arrivalStation = models.CharField(max_length=100)
     arrivalStation_IATA = models.CharField(max_length=100)
     departureStation = models.CharField(max_length=100)

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block allrequests %}
+
+<ul>
+  {% for request in requests  %}
+  <li>
+    {{ request.request_id }}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

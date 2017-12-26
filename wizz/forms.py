@@ -10,9 +10,9 @@ class FlightSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(FlightSearchForm, self).__init__(*args, **kwargs)
-        self.fields['departureStation'].choices = [('', '----------')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
-        self.fields['arrivalStation'].choices = [('', '----------')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
-        self.fields['priceType'].choices = [('', '----------')] + [(pt.priceType, pt.name) for pt in priceType.objects.all()]
+        self.fields['departureStation'].choices = [('', '! choose departure airport')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
+        self.fields['arrivalStation'].choices = [('', '! choose arrival airport')] + [(lang.iata_code, lang.name) for lang in Airport.objects.all()]
+        self.fields['priceType'].choices = [('', '! choose type of prices')] + [(pt.priceType, pt.name) for pt in priceType.objects.all()]
 
     departureStation = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))
     arrivalStation = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict))

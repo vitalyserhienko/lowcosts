@@ -20,7 +20,10 @@ from wizz import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
-    url(r'^results', views.wizz, name='wizz'),
+    # url(r'^results', views.wizz, name='wizz'),
     url(r'^history', views.search_history, name='search-history'),
     url(r'^search', views.flight_search_form, name='search-form'),
+    url(r'^requests', views.get_all_requests, name='all-requests'),
+    url(r'^results/(?P<request_id>[\w{}.-]{1,12})/$', views.get_search_results, name='search-results'),
+
 ]
