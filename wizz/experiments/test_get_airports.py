@@ -1,4 +1,4 @@
-from .models import Airport
+from wizz.models import Airport
 import requests
 import json
 

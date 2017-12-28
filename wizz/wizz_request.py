@@ -5,21 +5,21 @@ import json
 def request_data(departureStation, arrivalStation, date_from, date_to, priceType):
     function_responce = {}
     function_responce_error = {}
-    request_url = "https://be.wizzair.com/7.7.1/Api/search/timetable"
+    request_url = "https://be.wizzair.com/7.7.2/Api/search/timetable"
     head = {'content-type': 'application/json'}
     payload = {"flightList":[{
-                                "departureStation": departureStation,
-                                "arrivalStation": arrivalStation,
-                                "from": date_from,
-                                "to": date_to
-                                },{
-                                "departureStation": arrivalStation,
-                                "arrivalStation": departureStation,
-                                "from": date_from,
-                                "to": date_to
-                                }],
-                                "priceType": priceType
-                                }
+        "departureStation": departureStation,
+        "arrivalStation": arrivalStation,
+        "from": date_from,
+        "to": date_to
+        },{
+        "departureStation": arrivalStation,
+        "arrivalStation": departureStation,
+        "from": date_from,
+        "to": date_to
+        }],
+        "priceType": priceType
+        }
     req = requests.post(request_url, headers=head, data=json.dumps(payload)).content
     req_json = json.loads(req, encoding='utf-8')
 
