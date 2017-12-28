@@ -30,7 +30,7 @@ def search_history(request):
     return render(request, 'wizz/history.html', { 'prices': prices })
 
 def get_search_results(request, request_id):
-    prices = Price.objects.filter(request_id=request_id)
+    prices = Price.objects.filter(request_id=request_id).order_by('price_USD', 'update_date')
     return render(request, 'wizz/results.html', {'prices': prices})
 
 def get_all_requests(request):
