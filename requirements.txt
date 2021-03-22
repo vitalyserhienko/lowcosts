@@ -11,7 +11,7 @@ future==0.16.0
 gunicorn==19.7.1
 html5lib==0.999999999
 idna==2.5
-lxml==3.8.0
+lxml==4.6.3
 matplotlib==2.1.0
 numpy==1.13.1
 olefile==0.44
